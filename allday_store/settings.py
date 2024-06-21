@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-dgi14plk1bdk8%tp=u(z*n+k9et4ld(#h81nn5#oila4q3012_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['8000-samiksha92-myecomstore-jmr68kw7r98.ws-us114.gitpod.io']
 
 
 # Application definition
