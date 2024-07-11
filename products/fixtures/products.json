@@ -1,0 +1,424 @@
+[
+    {
+      "pk": 1,
+      "model": "products.product",
+      "fields": {
+        "sku": "bc1001",
+        "name": "Basic White T-Shirt",
+        "description": "A classic white t-shirt made from 100% cotton. Perfect for any casual occasion.",
+        "price": 15.99,
+        "category": 2,
+        "rating": 4.5,
+        "image_url": "https://example.com/images/white_tshirt.jpg",
+        "image": "white_tshirt.jpg"
+      }
+    },
+    {
+      "pk": 2,
+      "model": "products.product",
+      "fields": {
+        "sku": "bc1002",
+        "name": "Black Crew Neck Sweater",
+        "description": "A versatile black crew neck sweater that pairs well with jeans or trousers.",
+        "price": 29.99,
+        "category": 2,
+        "rating": 4.7,
+        "image_url": "https://example.com/images/black_sweater.jpg",
+        "image": "black_sweater.jpg"
+      }
+    },
+    {
+      "pk": 3,
+      "model": "products.product",
+      "fields": {
+        "sku": "bc1003",
+        "name": "Navy Blue Polo Shirt",
+        "description": "A stylish navy blue polo shirt made from breathable cotton.",
+        "price": 24.99,
+        "category": 2,
+        "rating": 4.3,
+        "image_url": "https://example.com/images/navy_polo.jpg",
+        "image": "navy_polo.jpg"
+      }
+    },
+    {
+      "pk": 4,
+      "model": "products.product",
+      "fields": {
+        "sku": "bc1004",
+        "name": "Grey Hoodie",
+        "description": "A comfortable grey hoodie with a front pocket and drawstring hood.",
+        "price": 34.99,
+        "category": 2,
+        "rating": 4.8,
+        "image_url": "https://example.com/images/grey_hoodie.jpg",
+        "image": "grey_hoodie.jpg"
+      }
+    },
+    {
+      "pk": 5,
+      "model": "products.product",
+      "fields": {
+        "sku": "bc1005",
+        "name": "Blue Jeans",
+        "description": "Classic blue jeans with a regular fit. Durable and comfortable.",
+        "price": 49.99,
+        "category": 3,
+        "rating": 4.6,
+        "image_url": "https://example.com/images/blue_jeans.jpg",
+        "image": "blue_jeans.jpg"
+      }
+    },
+    {
+      "pk": 6,
+      "model": "products.product",
+      "fields": {
+        "sku": "bc1006",
+        "name": "Black Chinos",
+        "description": "Sleek black chinos suitable for both casual and semi-formal wear.",
+        "price": 39.99,
+        "category": 3,
+        "rating": 4.4,
+        "image_url": "https://example.com/images/black_chinos.jpg",
+        "image": "black_chinos.jpg"
+      }
+    },
+    {
+      "pk": 7,
+      "model": "products.product",
+      "fields": {
+        "sku": "bc1007",
+        "name": "White Sneakers",
+        "description": "Simple and stylish white sneakers that go with any outfit.",
+        "price": 59.99,
+        "category": 4,
+        "rating": 4.9,
+        "image_url": "https://example.com/images/white_sneakers.jpg",
+        "image": "white_sneakers.jpg"
+      }
+    },
+    {
+      "pk": 8,
+      "model": "products.product",
+      "fields": {
+        "sku": "bc1008",
+        "name": "Black Leather Belt",
+        "description": "A high-quality black leather belt with a classic buckle.",
+        "price": 19.99,
+        "category": 4,
+        "rating": 4.2,
+        "image_url": "https://example.com/images/black_belt.jpg",
+        "image": "black_belt.jpg"
+      }
+    },
+    {
+      "pk": 9,
+      "model": "products.product",
+      "fields": {
+        "sku": "bc1009",
+        "name": "Grey Beanie",
+        "description": "A cozy grey beanie perfect for colder weather.",
+        "price": 14.99,
+        "category": 4,
+        "rating": 4.5,
+        "image_url": "https://example.com/images/grey_beanie.jpg",
+        "image": "grey_beanie.jpg"
+      }
+    },
+    {
+      "pk": 10,
+      "model": "products.product",
+      "fields": {
+        "sku": "bc1010",
+        "name": "White Dress Shirt",
+        "description": "A crisp white dress shirt ideal for formal occasions.",
+        "price": 39.99,
+        "category": 2,
+        "rating": 4.7,
+        "image_url": "https://example.com/images/white_dress_shirt.jpg",
+        "image": "white_dress_shirt.jpg"
+      }
+    },
+    {
+      "pk": 11,
+      "model": "products.product",
+      "fields": {
+        "sku": "bc1011",
+        "name": "Black Leather Wallet",
+        "description": "A classic black leather wallet with multiple card slots and a cash compartment.",
+        "price": 29.99,
+        "category": 4,
+        "rating": 4.6,
+        "image_url": "https://example.com/images/black_wallet.jpg",
+        "image": "black_wallet.jpg"
+      }
+    },
+    {
+      "pk": 12,
+      "model": "products.product",
+      "fields": {
+        "sku": "bc1012",
+        "name": "Silver Wristwatch",
+        "description": "A sleek silver wristwatch with a minimalist design.",
+        "price": 99.99,
+        "category": 4,
+        "rating": 4.8,
+        "image_url": "https://example.com/images/silver_watch.jpg",
+        "image": "silver_watch.jpg"
+      }
+    },
+    {
+      "pk": 13,
+      "model": "products.product",
+      "fields": {
+        "sku": "bc1013",
+        "name": "Black Sunglasses",
+        "description": "Stylish black sunglasses with UV protection.",
+        "price": 19.99,
+        "category": 4,
+        "rating": 4.5,
+        "image_url": "https://example.com/images/black_sunglasses.jpg",
+        "image": "black_sunglasses.jpg"
+      }
+    },
+    {
+      "pk": 14,
+      "model": "products.product",
+      "fields": {
+        "sku": "bc1014",
+        "name": "Brown Leather Gloves",
+        "description": "Comfortable brown leather gloves perfect for cold weather.",
+        "price": 24.99,
+        "category": 4,
+        "rating": 4.4,
+        "image_url": "https://example.com/images/brown_gloves.jpg",
+        "image": "brown_gloves.jpg"
+      }
+    },
+    {
+      "pk": 15,
+      "model": "products.product",
+      "fields": {
+        "sku": "bc1015",
+        "name": "Black Backpack",
+        "description": "A durable black backpack with multiple compartments.",
+        "price": 49.99,
+        "category": 4,
+        "rating": 4.7,
+        "image_url": "https://example.com/images/black_backpack.jpg",
+        "image": "black_backpack.jpg"
+      }
+    },
+    {
+      "pk": 16,
+      "model": "products.product",
+      "fields": {
+        "sku": "aw1001",
+        "name": "Black Joggers",
+        "description": "Comfortable black joggers perfect for workouts or casual wear.",
+        "price": 29.99,
+        "category": 1,
+        "rating": 4.7,
+        "image_url": "https://example.com/images/black_joggers.jpg",
+        "image": "black_joggers.jpg"
+      }
+    },
+    {
+      "pk": 17,
+      "model": "products.product",
+      "fields": {
+        "sku": "aw1002",
+        "name": "Grey Sweatshirt",
+        "description": "A soft grey sweatshirt suitable for both workouts and lounging.",
+        "price": 25.99,
+        "category": 1,
+        "rating": 4.6,
+        "image_url": "https://example.com/images/grey_sweatshirt.jpg",
+        "image": "grey_sweatshirt.jpg"
+      }
+    },
+    {
+      "pk": 18,
+      "model": "products.product",
+      "fields": {
+        "sku": "aw1003",
+        "name": "Blue Running Shorts",
+        "description": "Lightweight blue running shorts with moisture-wicking fabric.",
+        "price": 19.99,
+        "category": 1,
+        "rating": 4.5,
+        "image_url": "https://example.com/images/blue_running_shorts.jpg",
+        "image": "blue_running_shorts.jpg"
+      }
+    },
+    {
+      "pk": 19,
+      "model": "products.product",
+      "fields": {
+        "sku": "aw1004",
+        "name": "Black Sports Bra",
+        "description": "A supportive black sports bra with breathable fabric.",
+        "price": 21.99,
+        "category": 1,
+        "rating": 4.8,
+        "image_url": "https://example.com/images/black_sports_bra.jpg",
+        "image": "black_sports_bra.jpg"
+      }
+    },
+    {
+      "pk": 20,
+      "model": "products.product",
+      "fields": {
+        "sku": "aw1005",
+        "name": "Grey Yoga Pants",
+        "description": "Comfortable grey yoga pants with a high waist and stretchable fabric.",
+        "price": 35.99,
+        "category": 1,
+        "rating": 4.9,
+        "image_url": "https://example.com/images/grey_yoga_pants.jpg",
+        "image": "grey_yoga_pants.jpg"
+      }
+    },
+    {
+      "pk": 21,
+      "model": "products.product",
+      "fields": {
+        "sku": "ca1001",
+        "name": "Blue Dress Shirt - Clearance",
+        "description": "A stylish blue dress shirt at a discounted price. Limited stock.",
+        "price": 19.99,
+        "category": 5,
+        "rating": 4.2,
+        "image_url": "https://example.com/images/blue_dress_shirt.jpg",
+        "image": "blue_dress_shirt.jpg"
+      }
+    },
+    {
+      "pk": 22,
+      "model": "products.product",
+      "fields": {
+        "sku": "ca1002",
+        "name": "Red T-Shirt - Clearance",
+        "description": "A comfortable red t-shirt at a clearance price.",
+        "price": 9.99,
+        "category": 5,
+        "rating": 4.0,
+        "image_url": "https://example.com/images/red_tshirt.jpg",
+        "image": "red_tshirt.jpg"
+      }
+    },
+    {
+      "pk": 23,
+      "model": "products.product",
+      "fields": {
+        "sku": "ca1003",
+        "name": "White Sneakers - Clearance",
+        "description": "Classic white sneakers on clearance. Limited sizes available.",
+        "price": 29.99,
+        "category": 5,
+        "rating": 4.3,
+        "image_url": "https://example.com/images/white_sneakers_clearance.jpg",
+        "image": "white_sneakers_clearance.jpg"
+      }
+    },
+    {
+      "pk": 24,
+      "model": "products.product",
+      "fields": {
+        "sku": "dl1001",
+        "name": "Black Leather Jacket - Deal",
+        "description": "A premium black leather jacket at a special price for a limited time.",
+        "price": 99.99,
+        "category": 6,
+        "rating": 4.9,
+        "image_url": "https://example.com/images/black_leather_jacket.jpg",
+        "image": "black_leather_jacket.jpg"
+      }
+    },
+    {
+      "pk": 25,
+      "model": "products.product",
+      "fields": {
+        "sku": "dl1002",
+        "name": "Grey Sweatpants - Deal",
+        "description": "Comfortable grey sweatpants at a discounted price.",
+        "price": 19.99,
+        "category": 6,
+        "rating": 4.7,
+        "image_url": "https://example.com/images/grey_sweatpants.jpg",
+        "image": "grey_sweatpants.jpg"
+      }
+    },
+    {
+      "pk": 26,
+      "model": "products.product",
+      "fields": {
+        "sku": "dl1003",
+        "name": "Blue Denim Jacket - Deal",
+        "description": "A stylish blue denim jacket at a special price for a limited time.",
+        "price": 49.99,
+        "category": 6,
+        "rating": 4.8,
+        "image_url": "https://example.com/images/blue_denim_jacket.jpg",
+        "image": "blue_denim_jacket.jpg"
+      }
+    },
+    {
+      "pk": 27,
+      "model": "products.product",
+      "fields": {
+        "sku": "na1001",
+        "name": "Green V-Neck T-Shirt - New Arrival",
+        "description": "A fresh new green v-neck t-shirt. Just arrived in stock.",
+        "price": 18.99,
+        "category": 7,
+        "rating": 4.6,
+        "image_url": "https://example.com/images/green_vneck_tshirt.jpg",
+        "image": "green_vneck_tshirt.jpg"
+      }
+    },
+    {
+      "pk": 28,
+      "model": "products.product",
+      "fields": {
+        "sku": "na1002",
+        "name": "Purple Hoodie - New Arrival",
+        "description": "A cozy purple hoodie. New in our collection.",
+        "price": 35.99,
+        "category": 7,
+        "rating": 4.7,
+        "image_url": "https://example.com/images/purple_hoodie.jpg",
+        "image": "purple_hoodie.jpg"
+      }
+    },
+    {
+      "pk": 29,
+      "model": "products.product",
+      "fields": {
+        "sku": "na1003",
+        "name": "Black Track Pants - New Arrival",
+        "description": "Comfortable black track pants. Latest in our activewear line.",
+        "price": 27.99,
+        "category": 7,
+        "rating": 4.8,
+        "image_url": "https://example.com/images/black_track_pants.jpg",
+        "image": "black_track_pants.jpg"
+      }
+    },
+    {
+      "pk": 30,
+      "model": "products.product",
+      "fields": {
+        "sku": "na1004",
+        "name": "Red Polo Shirt - New Arrival",
+        "description": "A stylish red polo shirt. Fresh in stock.",
+        "price": 22.99,
+        "category": 7,
+        "rating": 4.5,
+        "image_url": "https://example.com/images/red_polo_shirt.jpg",
+        "image": "red_polo_shirt.jpg"
+      }
+    }
+  ]
+  
+  
