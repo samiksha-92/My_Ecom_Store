@@ -28,3 +28,27 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+
+class Customer(models.Model):
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    email = models.EmailField(unique=True)
+    phone_number = models.CharField(max_length=15, null=True, blank=True)
+    address = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
+
+
+class Review(models.Model):
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)
+    customer = models.ForeignKey('Customer', on_delete=models.CASCADE)
+    review_text = models.TextField(null =True, blank=True)
+    
+    def __str__(self):
+        return f"Review by {self.customer.full_name()} for {self.product.name}"
+
+    
