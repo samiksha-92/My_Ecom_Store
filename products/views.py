@@ -10,40 +10,42 @@ from django.contrib import messages
 from django.db.models import Q
 from .models import Product,Category
 
-
+    
+    
 
 def all_products(request):
-    
     products = Product.objects.all()
-
-    # Initialize variables
     query = request.GET.get('q')
-    categories = request.GET.getlist('category', None)
+    categories = request.GET.getlist('category')
 
-    
+
+    # Handle category filtering
     if categories:
+        # Check if categories contain a single comma-separated string
+        if len(categories) == 1:
+            categories = categories[0].split(',')
         products = products.filter(category__name__in=categories)
-        categories = Category.objects.filter(name__in=categories)
-    
+        selected_categories = Category.objects.filter(name__in=categories)
+    else:
+        selected_categories = None
+
     
     if query:
         products = products.filter(Q(name__icontains=query) | Q(description__icontains=query))
         if not products.exists():
             messages.error(request, "No products found matching your search criteria.")
+        
     
-    # Handle empty search query
-    if not query and request.GET.get('q') == '':
+    if query is not None and query == '':
         messages.error(request, "Please enter a search term!")
 
     context = {
         'products': products,
-        'current_categories': categories,
+        'current_categories': selected_categories,
         'search_term': query,
     }
 
     return render(request, 'products/products.html', context)
-
-
      
 
 
