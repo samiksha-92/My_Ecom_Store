@@ -60,6 +60,15 @@ body {
     border : #000 !important;
 }
 
+.text-success a {
+    color: #28a745;
+    text-decoration: none;
+}
+
+.text-success a:hover {
+    color: #155724;
+    text-decoration: underline;
+}
 
 /* -------------------------------- Media Queries */
 
