@@ -17,6 +17,7 @@ def all_products(request):
     products = Product.objects.all()
     query = request.GET.get('q')
     categories = request.GET.getlist('category')
+    sort_by = request.GET.get('sort_by',None)
 
 
     # Handle category filtering
@@ -35,7 +36,13 @@ def all_products(request):
         if not products.exists():
             messages.error(request, "No products found matching your search criteria.")
         
-    
+    if sort_by == 'price_asc':
+        products = products.order_by('price')
+    elif sort_by == 'price_desc':
+        products = products.order_by('-price')
+    elif sort_by == 'rating_desc':
+        products = products.order_by('-rating')
+
     if query is not None and query == '':
         messages.error(request, "Please enter a search term!")
 
@@ -43,6 +50,7 @@ def all_products(request):
         'products': products,
         'current_categories': selected_categories,
         'search_term': query,
+        'sort_by' : sort_by,
     }
 
     return render(request, 'products/products.html', context)
