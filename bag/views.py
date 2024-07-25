@@ -21,8 +21,7 @@ def add_to_bag(request,product_id):
         bag[product_id] = quantity
 
     request.session['bag'] = bag
-    print({k: v for k, v in bag.items() if k != 'product_id'})
-    #print(request.session['bag'])
-
+    #print({k: v for k, v in bag.items() if k != 'product_id'})
+    
     return redirect(request.POST.get('redirect_url', 'products'))
 
