@@ -64,8 +64,10 @@ def all_products(request):
 def product_detail(request,pk):
 
     product = get_object_or_404(Product,pk=pk)
+    sizes = product.sizes.split(',') if product.sizes else []
     context = {
         'product' : product,
+        'sizes' : sizes,
     }
     
     return render (request, 'products/product_detail.html',context)    
