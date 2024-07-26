@@ -70,6 +70,47 @@ body {
     text-decoration: underline;
 }
 
+.table-header {
+    color: #333;
+    font-weight: bold;
+}
+
+.table-cell {
+    color: #db9191;
+}
+
+.table-footer {
+    color: #5ad8e8;
+    text-align: right;
+}
+
+.table-button {
+    color:  #17a2b4;
+    border-color: #ffffff;
+    text-decoration: none;
+}
+
+.table-button:hover,
+.table-button:active,
+.table-button:focus {
+    background: #222;
+    color: #fff;
+}
+
+.table-button-hover {
+    color: #17a2b4;
+    border-color: #17a2b4;
+}
+
+.table-button-hover:hover,
+.table-button-hover:active,
+.table-button-hover:focus {
+    color: #155724;
+    border-color: #155724;
+    text-decoration: underline;
+}
+
+
 /* -------------------------------- Media Queries */
 
 /* Slightly larger container on xl screens */
