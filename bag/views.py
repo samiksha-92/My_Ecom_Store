@@ -10,18 +10,22 @@ def view_bag(request):
 def add_to_bag(request,product_id):
 
     product = get_object_or_404(Product, pk = product_id)
-    bag = request.session.get('bag',{})
     quantity = int(request.POST.get('quantity'))
+    size = request.POST.get('size',None)
+    bag = request.session.get('bag',{})
 
     product_id = int(product_id)
 
-    if product_id in bag:
-        bag[product_id] += quantity
+    product_key = f"{product_id}_{size}"
+
+    if product_key in bag:
+        bag[product_key]['quantity'] += quantity
     else:
-        bag[product_id] = quantity
+        bag[product_key] = {'quantity' : quantity, 'size': size,}
+
 
     request.session['bag'] = bag
-    #print({k: v for k, v in bag.items() if k != 'product_id'})
+    
     
     return redirect(request.POST.get('redirect_url', 'products'))
 
