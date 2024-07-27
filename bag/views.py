@@ -7,25 +7,36 @@ from products.models import Product
 def view_bag(request):
     return render (request, 'bag/bag.html')
 
-def add_to_bag(request,product_id):
 
-    product = get_object_or_404(Product, pk = product_id)
+from django.shortcuts import get_object_or_404
+from products.models import Product
+
+def add_to_bag(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
     quantity = int(request.POST.get('quantity'))
-    size = request.POST.get('size',None)
-    bag = request.session.get('bag',{})
+    size = request.POST.get('size', None)
+    bag = request.session.get('bag', {})
 
-    product_id = int(product_id)
-
+    # Create a unique key for each product and size combination
     product_key = f"{product_id}_{size}"
 
-    if product_key in bag:
-        bag[product_key]['quantity'] += quantity
-    else:
-        bag[product_key] = {'quantity' : quantity, 'size': size,}
-
-
-    request.session['bag'] = bag
+    # Debug print to check the current state of the bag
+    print("Current Bag State:", bag)
+    print("Product Key:", product_key)
     
+    if product_key in bag:
+        if isinstance(bag[product_key], dict):
+            # Increment quantity if product already in bag
+            bag[product_key]['quantity'] += quantity
+        else:
+            print(f"Unexpected item data type for {product_key}: {type(bag[product_key])}")
+            bag[product_key] = {'quantity': quantity, 'size': size}
+    else:
+        # Add product with quantity and size to the bag
+        bag[product_key] = {'quantity': quantity, 'size': size}
+
+    # Save the updated bag to the session
+    request.session['bag'] = bag
     
     return redirect(request.POST.get('redirect_url', 'products'))
 

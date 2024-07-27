@@ -2,6 +2,16 @@ from decimal import Decimal
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 from products.models import Product
+from decimal import Decimal
+from django.conf import settings
+from django.shortcuts import get_object_or_404
+from products.models import Product
+
+from decimal import Decimal
+from django.conf import settings
+from django.shortcuts import get_object_or_404
+from products.models import Product
+
 
 def bag_contents(request):
     bag_items = []
@@ -20,18 +30,29 @@ def bag_contents(request):
         
         product = get_object_or_404(Product, pk=product_id)
 
-        # Calculate total and product count
-        total += item_data['quantity'] * product.price
-        product_count += item_data['quantity']
+        # Ensure item_data is a dictionary
+        if isinstance(item_data, dict):
+            quantity = item_data.get('quantity', 0)  # Use .get() to avoid KeyError
+            if isinstance(quantity, int):
+                # Calculate subtotal
+                subtotal = quantity * product.price
+                total += subtotal
+                product_count += quantity
 
-        # Add item details to the bag_items list
-        bag_items.append({
-            'product_id': product_id,
-            'quantity': item_data['quantity'],
-            'product': product,
-            'size': size,
-        })
+                # Add item details to the bag_items list
+                bag_items.append({
+                    'product_id': product_id,
+                    'quantity': quantity,
+                    'product': product,
+                    'size': size,
+                    'subtotal': subtotal  # Include subtotal in bag_items
+                })
+            else:
+                print(f"Unexpected quantity type for {product_key}: {type(quantity)}")
+        else:
+            print(f"Unexpected item_data type for {product_key}: {type(item_data)}")
 
+    # Calculate delivery and grand total
     if total < settings.FREE_DELIVERY_THRESHOLD:
         delivery = total * Decimal(settings.STANDARD_DELIVERY_PERCENTAGE / 100)
         free_delivery_delta = settings.FREE_DELIVERY_THRESHOLD - total
@@ -51,53 +72,3 @@ def bag_contents(request):
     }
 
     return context
-
-# def bag_contents(request):
-
-#     bag_items = []
-#     total = 0
-#     product_count = 0
-#     bag = request.session.get('bag',{})
-
-
-#     for product_id, quantity in bag.items():
-#         for product_id_str, quantity in bag.items():
-#         # Convert product_id_str to integer
-#          try:
-#             product_id = int(product_id_str)
-#          except ValueError:
-#             continue  # Skip if product_id is not a valid integer
-        
-#         product = get_object_or_404(Product, pk=product_id)
-#         total += quantity * product.price
-#         product_count += quantity
-#         bag_items.append(
-#             {'product_id' : product_id,
-#               'quantity' : quantity,
-#               'product' : product,
-#             }
-#         )
-
-
-#     if total < settings.FREE_DELIVERY_THRESHOLD:
-#         delivery = total * Decimal(settings.STANDARD_DELIVERY_PERCENTAGE/100)
-#         free_delivery_delta = settings.FREE_DELIVERY_THRESHOLD - total
-#     else :
-#         delivery = 0
-#         free_delivery_delta = 0
-
-#     grand_total = delivery + total   
-#     context = {
-#       'bag_items' : bag_items,
-#        'total' : total,
-#        'product_count' : product_count,
-#        'delivery' : delivery,
-#        'free_delivery_delta' : free_delivery_delta,
-#        'free_delivery_threshold' : settings.FREE_DELIVERY_THRESHOLD,
-#        'grand_total' : grand_total,
-#     }
-
-#     return context
-
-
-       

@@ -76,16 +76,16 @@ body {
 }
 
 .table-cell {
-    color: #db9191;
+    color: rgb(10, 0, 0);
 }
 
 .table-footer {
-    color: #5ad8e8;
+    color: #e6850f;
     text-align: right;
 }
 
 .table-button {
-    color:  #17a2b4;
+    color:  #f17c07;
     border-color: #ffffff;
     text-decoration: none;
 }
