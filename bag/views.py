@@ -13,7 +13,16 @@ from products.models import Product
 
 def add_to_bag(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
-    quantity = int(request.POST.get('quantity'))
+    quantity_str = request.POST.get('quantity','0')
+
+    try:
+        # Convert quantity to int, default to 1 if conversion fails
+        quantity = int(quantity_str)
+    except ValueError:
+        quantity = 1  
+
+
+
     size = request.POST.get('size', None)
     bag = request.session.get('bag', {})
 

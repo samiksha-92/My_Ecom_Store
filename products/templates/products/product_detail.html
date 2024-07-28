@@ -51,7 +51,7 @@
                         {% endif %}
                     </select>
                     <label for="quantity"><strong>Quantity:</strong></label>
-                    <input type="number" name="quantity" value="1" min="1" max="99" id="id_qty_{{ product.id }}">
+                    <input type="number" name="quantity" value="1" min="1" max="5" id="id_qty_{{ product.id }}" required>
                     
                     <a href="{% url 'products' %}" class="btn btn-outline-black">
                         <i class="fas fa-chevron-left"></i> Keep Shopping
