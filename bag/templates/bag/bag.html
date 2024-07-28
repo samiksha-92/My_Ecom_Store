@@ -28,6 +28,7 @@
                         <thead class="text-black">
                             <tr>
                                 <th scope="col" class="table-header">Product</th>
+                                <th scope="col" class="table-header">Size</th>
                                 <th scope="col" class="table-header">Price</th>
                                 <th scope="col" class="table-header">Qty</th>
                                 <th scope="col" class="table-header">Subtotal</th>
@@ -43,6 +44,7 @@
                                         <span class="small" style="color: #666;">SKU: {{ item.product.sku|upper }}</span>
                                     </div>
                                 </td>
+                                <td class="table-cell">{{ item.size|default:"N/A" }}</td>
                                 <td class ="table-cell">${{ item.product.price|floatformat:2 }}</td>
                                 <td class = "table-cell">{{ item.quantity }}</td>
                                 <td class = "table-cell">${{ item.subtotal|floatformat:2 }}</td>

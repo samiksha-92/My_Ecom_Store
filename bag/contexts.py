@@ -39,13 +39,13 @@ def bag_contents(request):
                 total += subtotal
                 product_count += quantity
 
-                # Add item details to the bag_items list
+                
                 bag_items.append({
                     'product_id': product_id,
                     'quantity': quantity,
                     'product': product,
                     'size': size,
-                    'subtotal': subtotal  # Include subtotal in bag_items
+                    'subtotal': subtotal  
                 })
             else:
                 print(f"Unexpected quantity type for {product_key}: {type(quantity)}")
