@@ -1,4 +1,6 @@
 from django.shortcuts import render,redirect, get_object_or_404
+from .contexts import bag_contents
+from django.http import JsonResponse
 
 from products.models import Product
 
@@ -8,44 +10,94 @@ def view_bag(request):
     return render (request, 'bag/bag.html')
 
 
-from django.shortcuts import get_object_or_404
-from products.models import Product
 
 def add_to_bag(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
-    quantity_str = request.POST.get('quantity','0')
+    quantity_str = request.POST.get('quantity', '0')
 
     try:
-        # Convert quantity to int, default to 1 if conversion fails
         quantity = int(quantity_str)
     except ValueError:
-        quantity = 1  
-
-
+        quantity = 1
 
     size = request.POST.get('size', None)
     bag = request.session.get('bag', {})
 
-    # Create a unique key for each product and size combination
     product_key = f"{product_id}_{size}"
 
     # Debug print to check the current state of the bag
     print("Current Bag State:", bag)
     print("Product Key:", product_key)
-    
+
     if product_key in bag:
         if isinstance(bag[product_key], dict):
-            # Increment quantity if product already in bag
             bag[product_key]['quantity'] += quantity
         else:
             print(f"Unexpected item data type for {product_key}: {type(bag[product_key])}")
             bag[product_key] = {'quantity': quantity, 'size': size}
     else:
-        # Add product with quantity and size to the bag
         bag[product_key] = {'quantity': quantity, 'size': size}
 
-    # Save the updated bag to the session
     request.session['bag'] = bag
-    
     return redirect(request.POST.get('redirect_url', 'products'))
 
+# def update_bag(request):
+#     if request.method == 'POST':
+#         product_key = request.POST.get('product_key')
+#         new_quantity = int(request.POST.get('quantity', 1))
+
+#         bag = request.session.get('bag', {})
+#         if product_key in bag:
+#             if isinstance(bag[product_key], dict):
+#                 if new_quantity > 0:
+#                     bag[product_key]['quantity'] = new_quantity
+#                 else:
+#                     del bag[product_key]
+#             else:
+#                 print(f"Unexpected item data type for {product_key}: {type(bag[product_key])}")
+#                 bag[product_key] = {'quantity': new_quantity, 'size': None}
+
+#             request.session['bag'] = bag
+
+#         context = bag_contents(request)
+
+#         return JsonResponse({
+#             'status': 'success',
+#             'total': context['total'],
+#             'grand_total': context['grand_total'],
+#             'subtotal': next((item['subtotal'] for item in context['bag_items'] if f"{item['product_id']}_{item['size']}" == product_key), 0)
+#         })
+#     return JsonResponse({'status': 'failed'})
+
+def update_bag(request):
+    if request.method == 'POST':
+        product_key = request.POST.get('product_key')
+        new_quantity = int(request.POST.get('quantity', 1))
+
+        bag = request.session.get('bag', {})
+        if product_key in bag:
+            if isinstance(bag[product_key], dict):
+                if new_quantity > 0:
+                    bag[product_key]['quantity'] = new_quantity
+                else:
+                    del bag[product_key]
+            else:
+                print(f"Unexpected item data type for {product_key}: {type(bag[product_key])}")
+                bag[product_key] = {'quantity': new_quantity, 'size': None}
+
+            request.session['bag'] = bag
+
+        # Recalculate the context with updated bag
+        context = bag_contents(request)
+
+        # Prepare response data
+        response_data = {
+            'status': 'success',
+            'total': round(context['total'], 2),  # Round to 2 decimal places
+            'grand_total': round(context['grand_total'], 2),  # Round to 2 decimal places
+            'subtotal': round(next((item['subtotal'] for item in context['bag_items'] if f"{item['product_id']}_{item['size']}" == product_key), 0), 2)  # Round to 2 decimal places
+        }
+
+        return JsonResponse(response_data)
+
+    return JsonResponse({'status': 'failed'})

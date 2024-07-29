@@ -46,15 +46,25 @@
                                 </td>
                                 <td class="table-cell">{{ item.size|default:"N/A" }}</td>
                                 <td class ="table-cell">${{ item.product.price|floatformat:2 }}</td>
-                                <td class = "table-cell">{{ item.quantity }}</td>
-                                <td class = "table-cell">${{ item.subtotal|floatformat:2 }}</td>
+                                <td class="table-cell">
+                                    <form action="{% url 'update_bag' %}" method="POST" class="update-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="product_key" value="{{ item.product_id }}_{{ item.size }}">
+                                        <button type="button" class="quantity-btn decrement-btn">-</button>
+                                        <input type="number" name="quantity" value="{{ item.quantity }}" class="quantity-input" min="1" max="5">
+                                        <button type="button" class="quantity-btn increment-btn">+</button>
+                                        <button type="submit" style="display: none;">Update</button>
+                                    </form>
+                                </td>
+                                <td class="table-cell subtotal">${{ item.subtotal|floatformat:2 }}</td>
+                                  
                             </tr>
                             {% endfor %}
                             <tr>
                                 <td colspan="4" class="table-footer">
-                                    <strong class = "table-footer">Bag Total: ${{ total|floatformat:2 }}</strong><br>
+                                    <strong class = "table-footer">Bag Total: <span class="total">${{ total|floatformat:2 }}</span></strong><br> <!-- Updated class -->
                                     Delivery: ${{ delivery|floatformat:2 }}<br>
-                                    <h4 class = "table-footer">Grand Total: ${{ grand_total|floatformat:2 }}</h4>
+                                    <h4 class = "table-footer">Grand Total: <span class="grand-total">${{ grand_total|floatformat:2 }}</span></h4> <!-- Updated class -->
                                     {% if free_delivery_delta > 0 %}
                                     <span class="text-danger">Spend ${{ free_delivery_delta }} more for free delivery!</span>
                                     {% endif %}
@@ -86,4 +96,8 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'bag/bag.js' %}"></script>
 {% endblock %}
