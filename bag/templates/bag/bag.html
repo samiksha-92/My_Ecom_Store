@@ -32,6 +32,7 @@
                                 <th scope="col" class="table-header">Price</th>
                                 <th scope="col" class="table-header">Qty</th>
                                 <th scope="col" class="table-header">Subtotal</th>
+                                <th scope="col" class="table-header">Actions</th> <!-- Added column for delete button -->
                             </tr>
                         </thead>
                         <tbody>
@@ -56,15 +57,23 @@
                                         <button type="submit" style="display: none;">Update</button>
                                     </form>
                                 </td>
-                                <td class="table-cell subtotal">${{ item.subtotal|floatformat:2 }}</td>
-                                  
+                                <td class="table-cell subtotal" id="subtotal-{{ item.product_id }}_{{ item.size }}">
+                                    ${{ item.subtotal|floatformat:2 }}
+                                </td>
+                                <td class="table-cell"> 
+                                    <form action="{% url 'remove_from_bag' %}" method="POST" class="remove-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="product_key" value="{{ item.product_id }}_{{ item.size }}">
+                                        <button type="button" class="remove-btn btn btn-danger">Delete</button>
+                                    </form>
+                                </td>
                             </tr>
                             {% endfor %}
                             <tr>
                                 <td colspan="4" class="table-footer">
-                                    <strong class = "table-footer">Bag Total: <span class="total">${{ total|floatformat:2 }}</span></strong><br> <!-- Updated class -->
+                                    <strong class="bag-total" id="bag-total">${{ total|floatformat:2 }}</strong><br> <!-- Updated class -->
                                     Delivery: ${{ delivery|floatformat:2 }}<br>
-                                    <h4 class = "table-footer">Grand Total: <span class="grand-total">${{ grand_total|floatformat:2 }}</span></h4> <!-- Updated class -->
+                                    <h4 class = "table-footer grand-total" id="grand-total">Grand Total: ${{ grand_total|floatformat:2 }}</span></h4> <!-- Updated class -->
                                     {% if free_delivery_delta > 0 %}
                                     <span class="text-danger">Spend ${{ free_delivery_delta }} more for free delivery!</span>
                                     {% endif %}

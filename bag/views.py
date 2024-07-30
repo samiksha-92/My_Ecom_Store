@@ -41,33 +41,7 @@ def add_to_bag(request, product_id):
     request.session['bag'] = bag
     return redirect(request.POST.get('redirect_url', 'products'))
 
-# def update_bag(request):
-#     if request.method == 'POST':
-#         product_key = request.POST.get('product_key')
-#         new_quantity = int(request.POST.get('quantity', 1))
 
-#         bag = request.session.get('bag', {})
-#         if product_key in bag:
-#             if isinstance(bag[product_key], dict):
-#                 if new_quantity > 0:
-#                     bag[product_key]['quantity'] = new_quantity
-#                 else:
-#                     del bag[product_key]
-#             else:
-#                 print(f"Unexpected item data type for {product_key}: {type(bag[product_key])}")
-#                 bag[product_key] = {'quantity': new_quantity, 'size': None}
-
-#             request.session['bag'] = bag
-
-#         context = bag_contents(request)
-
-#         return JsonResponse({
-#             'status': 'success',
-#             'total': context['total'],
-#             'grand_total': context['grand_total'],
-#             'subtotal': next((item['subtotal'] for item in context['bag_items'] if f"{item['product_id']}_{item['size']}" == product_key), 0)
-#         })
-#     return JsonResponse({'status': 'failed'})
 
 def update_bag(request):
     if request.method == 'POST':
@@ -87,17 +61,38 @@ def update_bag(request):
 
             request.session['bag'] = bag
 
-        # Recalculate the context with updated bag
         context = bag_contents(request)
 
-        # Prepare response data
-        response_data = {
+        return JsonResponse({
             'status': 'success',
-            'total': round(context['total'], 2),  # Round to 2 decimal places
-            'grand_total': round(context['grand_total'], 2),  # Round to 2 decimal places
-            'subtotal': round(next((item['subtotal'] for item in context['bag_items'] if f"{item['product_id']}_{item['size']}" == product_key), 0), 2)  # Round to 2 decimal places
-        }
+            'total': float(context['total']),
+            'grand_total': float(context['grand_total']),
+            'subtotal': next((item['subtotal'] for item in context['bag_items'] if f"{item['product_id']}_{item['size']}" == product_key), 0)
+        })
+    return JsonResponse({'status': 'failed'})
 
-        return JsonResponse(response_data)
 
+
+            
+
+
+
+
+
+def remove_from_bag(request):
+    if request.method == 'POST':
+        product_key = request.POST.get('product_key')
+        bag = request.session.get('bag', {})
+
+        if product_key in bag:
+            del bag[product_key]
+            request.session['bag'] = bag
+
+        context = bag_contents(request)
+
+        return JsonResponse({
+            'status': 'success',
+            'total': context['total'],
+            'grand_total': context['grand_total'],
+        })
     return JsonResponse({'status': 'failed'})
