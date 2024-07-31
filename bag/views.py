@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect, get_object_or_404
+from django.contrib import messages
 from .contexts import bag_contents
 from django.http import JsonResponse
 
@@ -32,11 +33,14 @@ def add_to_bag(request, product_id):
     if product_key in bag:
         if isinstance(bag[product_key], dict):
             bag[product_key]['quantity'] += quantity
+            messages.success(request, f'Updated {product.name} quantity to {bag[product_key]["quantity"]}')
         else:
             print(f"Unexpected item data type for {product_key}: {type(bag[product_key])}")
             bag[product_key] = {'quantity': quantity, 'size': size}
+            messages.success(request, f'Added {product.name} to your bag')
     else:
         bag[product_key] = {'quantity': quantity, 'size': size}
+        messages.success(request, f'Added {product.name} to your bag')
 
     request.session['bag'] = bag
     return redirect(request.POST.get('redirect_url', 'products'))
@@ -53,15 +57,20 @@ def update_bag(request):
             if isinstance(bag[product_key], dict):
                 if new_quantity > 0:
                     bag[product_key]['quantity'] = new_quantity
+                    messages.success(request, f'Updated product quantity to {new_quantity}')
                 else:
                     del bag[product_key]
+                    messages.success(request, 'Removed product from your bag')
             else:
                 print(f"Unexpected item data type for {product_key}: {type(bag[product_key])}")
                 bag[product_key] = {'quantity': new_quantity, 'size': None}
+                messages.success(request, 'Updated product quantity')
 
             request.session['bag'] = bag
 
         context = bag_contents(request)
+
+        
 
         return JsonResponse({
             'status': 'success',
@@ -87,6 +96,7 @@ def remove_from_bag(request):
         if product_key in bag:
             del bag[product_key]
             request.session['bag'] = bag
+            messages.success(request, 'Removed product from your bag')
 
         context = bag_contents(request)
 
