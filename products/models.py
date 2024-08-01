@@ -38,8 +38,12 @@ class Customer(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(unique=True)
-    phone_number = models.CharField(max_length=15, null=True, blank=True)
-    address = models.TextField(null=True, blank=True)
+    phone_number = models.CharField(max_length=20,default='Unknown')
+    country = models.CharField(max_length=40, default= 'USA')
+    postcode = models.CharField(max_length=20, blank=True, null=True)
+    town_or_city = models.CharField(max_length=40,default='Unknown')
+    street_address1 = models.CharField(max_length=80,default='Unknown')
+    street_address2 = models.CharField(max_length=80, blank=True, null=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
