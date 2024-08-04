@@ -14,6 +14,17 @@ class Order(models.Model):
     delivery_cost = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     order_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     grand_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    first_name = models.CharField(max_length=50, default='Unknown')
+    last_name = models.CharField(max_length=50, default='NA')
+    email = models.EmailField(default='example@example.com')
+    phone_number = models.CharField(max_length=20, default='0000000000')
+    country = models.CharField(max_length=40, default='Unknown Country')
+    postcode = models.CharField(max_length=20, default='000000')
+    town_or_city = models.CharField(max_length=40, default='Unknown City')
+    street_address1 = models.CharField(max_length=80, default='Unknown Address')
+    street_address2 = models.CharField(max_length=80, blank=True, null=True)
+    county = models.CharField(max_length=80, blank=True, null=True)
+
 
     def _generate_order_number(self):
         """ Generate a unique order number """
