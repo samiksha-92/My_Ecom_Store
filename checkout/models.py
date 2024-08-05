@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-
+import uuid
 from products.models import Customer
 from products.models import Product
 from django.db.models import Sum
