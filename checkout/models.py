@@ -23,7 +23,7 @@ class Order(models.Model):
     town_or_city = models.CharField(max_length=40, default='Unknown City')
     street_address1 = models.CharField(max_length=80, default='Unknown Address')
     street_address2 = models.CharField(max_length=80, blank=True, null=True)
-    county = models.CharField(max_length=80, blank=True, null=True)
+    #county = models.CharField(max_length=80, blank=True, null=True)
 
 
     def _generate_order_number(self):
