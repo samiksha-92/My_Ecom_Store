@@ -2,10 +2,9 @@ from decimal import Decimal
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 from products.models import Product
-from decimal import Decimal
-from django.conf import settings
-from django.shortcuts import get_object_or_404
-from products.models import Product
+
+
+
 
 
 
@@ -16,38 +15,30 @@ def bag_contents(request):
     product_count = 0
     bag = request.session.get('bag', {})
 
-    for product_key, item_data in bag.items():
+    for product_id_str, quantity in bag.items():
         try:
-            # Split the product_key into product_id and size
-            product_id_str, size = product_key.split('_', 1)
             product_id = int(product_id_str)
-        except (ValueError, IndexError):
-            # Log or print error if product_key is not in expected format
+        except ValueError:
+            # Log or print error if product_id_str is not an integer
             continue  # Skip this entry if there's a format error
         
         product = get_object_or_404(Product, pk=product_id)
 
-        # Ensure item_data is a dictionary
-        if isinstance(item_data, dict):
-            quantity = item_data.get('quantity', 0)  # Use .get() to avoid KeyError
-            if isinstance(quantity, int):
-                # Calculate subtotal
-                subtotal = quantity * product.price
-                total += subtotal
-                product_count += quantity
+        # Ensure quantity is an integer
+        if isinstance(quantity, int):
+            # Calculate subtotal
+            subtotal = quantity * product.price
+            total += subtotal
+            product_count += quantity
 
-                
-                bag_items.append({
-                    'product_id': product_id,
-                    'quantity': quantity,
-                    'product': product,
-                    'size': size,
-                    'subtotal': subtotal  
-                })
-            else:
-                print(f"Unexpected quantity type for {product_key}: {type(quantity)}")
+            bag_items.append({
+                'product_id': product_id,
+                'quantity': quantity,
+                'product': product,
+                'subtotal': subtotal  
+            })
         else:
-            print(f"Unexpected item_data type for {product_key}: {type(item_data)}")
+            print(f"Unexpected quantity type for {product_id_str}: {type(quantity)}")
 
     # Calculate delivery and grand total
     if total < settings.FREE_DELIVERY_THRESHOLD:

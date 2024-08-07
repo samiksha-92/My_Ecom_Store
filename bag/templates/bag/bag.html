@@ -9,106 +9,66 @@
         </div>
     </div>
 {% endblock %}
-
 {% block content %}
-<div class="overlay"></div>
-<div class="container mb-2">
-    <div class="row">
-        <div class="col">
-            <hr>
-            <h2 class="logo-font mb-4">Shopping Bag</h2>
-            <hr>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col">
-            {% if bag_items %}
-                <div class="table-responsive rounded">
-                    <table class="table table-sm table-borderless">
-                        <thead class="text-black">
-                            <tr>
-                                <th scope="col" class="table-header">Product</th>
-                                <th scope="col" class="table-header">Size</th>
-                                <th scope="col" class="table-header">Price</th>
-                                <th scope="col" class="table-header">Qty</th>
-                                <th scope="col" class="table-header">Subtotal</th>
-                                <th scope="col" class="table-header">Actions</th> <!-- Added column for delete button -->
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for item in bag_items %}
-                            <tr>
-                                <td class ="table-cell">
-                                    <img class="img-fluid rounded" src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="max-width: 50px;"/>
-                                    <div>
-                                        <strong class = "table-cell">{{ item.product.name }}</strong>
-                                        <span class="small" style="color: #666;">SKU: {{ item.product.sku|upper }}</span>
-                                    </div>
-                                </td>
-                                <td class="table-cell">{{ item.size|default:"N/A" }}</td>
-                                <td class ="table-cell">${{ item.product.price|floatformat:2 }}</td>
-                                <td class="table-cell">
-                                    <form action="{% url 'update_bag' %}" method="POST" class="update-form">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="product_key" value="{{ item.product_id }}_{{ item.size }}">
-                                        <button type="button" class="quantity-btn decrement-btn">-</button>
-                                        <input type="number" name="quantity" value="{{ item.quantity }}" class="quantity-input" min="1" max="5">
-                                        <button type="button" class="quantity-btn increment-btn">+</button>
-                                        <button type="submit" style="display: none;">Update</button>
-                                    </form>
-                                </td>
-                                <td class="table-cell subtotal" id="subtotal-{{ item.product_id }}_{{ item.size }}">
-                                    ${{ item.subtotal|floatformat:2 }}
-                                </td>
-                                <td class="table-cell"> 
-                                    <form action="{% url 'remove_from_bag' %}" method="POST" class="remove-form">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="product_key" value="{{ item.product_id }}_{{ item.size }}">
-                                        <button type="button" class="remove-btn btn btn-danger">Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                            <tr>
-                                <td colspan="4" class="table-footer">
-                                    <strong class="bag-total" id="bag-total">${{ total|floatformat:2 }}</strong><br> <!-- Updated class -->
-                                    Delivery: ${{ delivery|floatformat:2 }}<br>
-                                    <h4 class = "table-footer grand-total" id="grand-total">Grand Total: ${{ grand_total|floatformat:2 }}</span></h4> <!-- Updated class -->
-                                    {% if free_delivery_delta > 0 %}
-                                    <span class="text-danger">Spend ${{ free_delivery_delta }} more for free delivery!</span>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="4" class="table-footer">
-                                    <a href="{% url 'products' %}" class="table-footer btn-outline-black btn-lg table-button table-button-hover">
-                                        <i class="fas fa-chevron-left"></i> Keep Shopping
-                                    </a>
-                                    <a href="{% url 'checkout' %}" class="btn btn-black btn-lg">
-                                        Secure Checkout <i class="fas fa-lock"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
-                </div>
-            {% else %}
-                <p class="lead mb-5">Your bag is empty.</p>
-                <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0 btn-lg">
-                    <span class="icon">
-                        <i class="fas fa-chevron-left"></i>
-                    </span>
-                    <span class="text-uppercase">Keep Shopping</span>
-                </a>
-            {% endif %}
-        </div>
-    </div>
+<div class="container">
+    <h1>Shopping Bag</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Subtotal</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in bag_items %}
+            <tr>
+                <td>
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" width="50">
+                    {{ item.product.name }}
+                </td>
+                <td>${{ item.product.price }}</td>
+                <td>
+                    <form class="update-form" action="{% url 'update_bag' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="product_id" value="{{ item.product_id }}">
+                        <button type="button" class="decrement-btn">-</button>
+                        <input type="number" name="quantity" value="{{ item.quantity }}" class="quantity-input">
+                        <button type="button" class="increment-btn">+</button>
+                    </form>
+                </td>
+                
+                <td id="subtotal-{{ item.product_id }}">${{ item.subtotal }}</td>
+                
+                <td>
+                    <form class="remove-form" action="{% url 'remove_from_bag' %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="product_id" value="{{ item.product_id }}">
+                        <button type="button" class="remove-btn">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3">Bag Total:</td>
+                <td id="bag-total">${{ total }}</td>
+            </tr>
+            <tr>
+                <td colspan="3">Grand Total:</td>
+                <td id="grand-total">${{ grand_total }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="{% url 'products' %}" class="btn btn-outline-secondary">Keep Shopping</a>
+    <a href="{% url 'checkout' %}" class="btn btn-primary">Secure Checkout</a>
 </div>
 {% endblock %}
 
-{% block extra_js %}
 
+
+
+{% block postloadjs %}
 <script src="{% static 'bag/bag.js' %}"></script>
 {% endblock %}

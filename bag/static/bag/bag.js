@@ -24,6 +24,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 updateBag(form);
             }
         });
+
+        // Ensure the quantity input manually changes trigger update
+        quantityInput.addEventListener('change', () => {
+            updateBag(form);
+        });
     });
 
     removeForms.forEach(form => {
@@ -37,7 +42,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateBag(form) {
         const formData = new FormData(form);
         const url = form.getAttribute('action');
-        const productKey = formData.get('product_key');
+        const productId = formData.get('product_id');
+        console.log('Updating product with ID:', productId);
 
         fetch(url, {
             method: 'POST',
@@ -49,13 +55,14 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             console.log('Update response:', data);
-            console.log('Product Key:', productKey);
+            console.log('Product ID:', productId);
 
-            const subtotalElement = document.querySelector(`#subtotal-${productKey}`);
+            const subtotalElement = document.querySelector(`#subtotal-${productId}`);
+            console.log('Subtotal element:', subtotalElement);
             if (subtotalElement) {
                 subtotalElement.innerText = `$${parseFloat(data.subtotal).toFixed(2)}`;
             } else {
-                console.error(`Element with ID #subtotal-${productKey} not found`);
+                console.error(`Element with ID #subtotal-${productId} not found`);
             }
 
             const bagTotalElement = document.getElementById('bag-total');
@@ -71,13 +78,6 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 console.error('Element with ID #grand-total not found');
             }
-
-            const mobileGrandTotalElement = document.getElementById('mobile-grand-total');
-            if (mobileGrandTotalElement) {
-                mobileGrandTotalElement.innerText = `$${parseFloat(data.grand_total).toFixed(2)}`;
-            } else {
-                console.error('Element with ID #mobile-grand-total not found');
-            }
         })
         .catch(error => {
             console.error('Error updating bag:', error);
@@ -87,6 +87,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function removeFromBag(form) {
         const formData = new FormData(form);
         const url = form.getAttribute('action');
+        const productId = formData.get('product_id');
+        console.log('Removing product with ID:', productId);
 
         fetch(url, {
             method: 'POST',
@@ -115,13 +117,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     grandTotalElement.innerText = `$${parseFloat(data.grand_total).toFixed(2)}`;
                 } else {
                     console.error('Element with ID #grand-total not found');
-                }
-
-                const mobileGrandTotalElement = document.getElementById('mobile-grand-total');
-                if (mobileGrandTotalElement) {
-                    mobileGrandTotalElement.innerText = `$${parseFloat(data.grand_total).toFixed(2)}`;
-                } else {
-                    console.error('Element with ID #mobile-grand-total not found');
                 }
             } else {
                 alert('Failed to remove the item');

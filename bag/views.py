@@ -1,12 +1,10 @@
-from django.shortcuts import render,redirect, get_object_or_404
-from django.contrib import messages
-from .contexts import bag_contents
-from django.http import JsonResponse
 
 from products.models import Product
-
-
-
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.http import JsonResponse
+from products.models import Product
+from .contexts import bag_contents
 
 def view_bag(request):
     return render(request, 'bag/bag.html')
@@ -20,9 +18,7 @@ def add_to_bag(request, product_id):
     except ValueError:
         quantity = 1
 
-
     bag = request.session.get('bag', {})
-    # Use product_id directly as the key
     if str(product_id) in bag:
         bag[str(product_id)] += quantity
         messages.success(request, f'Updated {product.name} quantity to {bag[str(product_id)]}')
@@ -58,14 +54,10 @@ def update_bag(request):
             'subtotal': next((item['subtotal'] for item in context['bag_items'] if str(item['product_id']) == product_id), 0)
         })
     return JsonResponse({'status': 'failed'})
-      
 
-
-        
-        
 def remove_from_bag(request):
     if request.method == 'POST':
-        product_id= request.POST.get('product_id')
+        product_id = request.POST.get('product_id')
         bag = request.session.get('bag', {})
 
         if product_id in bag:
