@@ -8,6 +8,7 @@ import stripe
 from django.conf import settings
 
 
+
 # Set the Stripe API key
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -17,6 +18,9 @@ def checkout(request):
 
     if request.method == 'POST':
         bag = request.session.get('bag', {})
+
+        # Debug: Print the bag to check its contents
+        print("Bag contents:", bag)
 
         form_data = {
             'first_name': request.POST['first_name'],
@@ -64,7 +68,10 @@ def checkout(request):
 
             for item_id, item_data in bag.items():
                 try:
-                    product = Product.objects.get(id=item_id)
+                    # Debug: Print the item_id to verify it's correct
+                    print("Item ID:", item_id)
+
+                    product = Product.objects.get(id=int(item_id))
                     if isinstance(item_data, int):
                         order_line_item = OrderLineItem(
                             order=order,
@@ -81,6 +88,14 @@ def checkout(request):
                                 product_size=size,
                             )
                             order_line_item.save()
+                except ValueError:
+                    print(f"Invalid product ID: {item_id}")
+                    messages.error(request, (
+                        "There was an error with one of the products in your bag. "
+                        "Please call us for assistance!"
+                    ))
+                    order.delete()
+                    return redirect(reverse('view_bag'))
                 except Product.DoesNotExist:
                     messages.error(request, (
                         "One of the products in your bag wasn't found in our database. "
@@ -90,7 +105,7 @@ def checkout(request):
                     return redirect(reverse('view_bag'))
 
             request.session['save_info'] = 'save-info' in request.POST
-            return redirect(reverse('checkout_success', args=[order.order_number]))
+            return redirect(reverse('order_confirmation', args=[order.order_number]))
         else:
             messages.error(request, 'There was an error with your form. \
                 Please double check your information.')

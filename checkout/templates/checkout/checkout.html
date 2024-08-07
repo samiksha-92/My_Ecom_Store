@@ -49,7 +49,7 @@
                         </div>
                         <div class="col-7">
                             <p class="my-0"><strong>{{ item.product.name }}</strong></p>
-                            <p class="my-0 small">Size: {% if item.product.has_sizes %}{{ item.size|upper }}{% else %}N/A{% endif %}</p>
+                            <p class="my-0 small">Size: {% if item.product.has_sizes %}{{ item.size|upper }}{% else %}FS{% endif %}</p>
                             <p class="my-0 small text-muted">Qty: {{ item.quantity }}</p>
                         </div>
                         <div class="col-3 text-right">
@@ -116,10 +116,8 @@
                             <label for="{{ order_form.street_address2.id_for_label }}" class="form-label">Street Address 2</label>
                             {{ order_form.street_address2 }}
                         </div>
-                        <div class="form-group">
-                            <label for="{{ order_form.county.id_for_label }}" class="form-label">County, State or Locality</label>
-                            {{ order_form.county }}
-                        </div>
+                        
+                        
                         <div class="form-check form-check-inline float-right mr-0">
                             {% if user.is_authenticated %}
                                 <label class="form-check-label" for="id-save-info">Save this delivery information to my profile</label>
