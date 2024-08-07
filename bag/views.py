@@ -20,30 +20,20 @@ def add_to_bag(request, product_id):
     except ValueError:
         quantity = 1
 
-    size = request.POST.get('size', None)
+
     bag = request.session.get('bag', {})
-
-    # Ensure the product_key is a string representation of the product ID and size
-    product_key = f"{product_id}_{size}"
-
-    # Debug print to check the current state of the bag
-    print("Current Bag State:", bag)
-    print("Product Key:", product_key)
-
-    if product_key in bag:
-        if isinstance(bag[product_key], dict):
-            bag[product_key]['quantity'] += quantity
-            messages.success(request, f'Updated {product.name} quantity to {bag[product_key]["quantity"]}')
-        else:
-            print(f"Unexpected item data type for {product_key}: {type(bag[product_key])}")
-            bag[product_key] = {'quantity': quantity, 'size': size}
-            messages.success(request, f'Added {product.name} to your bag')
+    # Use product_id directly as the key
+    if str(product_id) in bag:
+        bag[str(product_id)] += quantity
+        messages.success(request, f'Updated {product.name} quantity to {bag[str(product_id)]}')
     else:
-        bag[product_key] = {'quantity': quantity, 'size': size}
+        bag[str(product_id)] = quantity
         messages.success(request, f'Added {product.name} to your bag')
 
     request.session['bag'] = bag
     return redirect(request.POST.get('redirect_url', 'products'))
+
+      
 
 def update_bag(request):
     if request.method == 'POST':
