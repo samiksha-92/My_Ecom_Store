@@ -90,3 +90,84 @@
     color: #000;
     border: 1px solid #000;
 }
+
+.header-container {
+    padding: 20px 0;
+    text-align: center;
+}
+
+.header-container h2 {
+    font-size: 36px;
+    font-weight: bold;
+    color: #333;
+}
+
+.thank-you-message {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.thank-you-message p {
+    font-size: 18px;
+    color: #666;
+}
+
+.order-confirmation-wrapper {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.order-confirmation-wrapper h5 {
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.order-confirmation-wrapper .row {
+    margin-bottom: 10px;
+}
+
+.order-confirmation-wrapper .text-md-right {
+    text-align: right;
+}
+
+.order-confirmation-wrapper .font-weight-bold {
+    font-weight: bold;
+}
+
+.order-info, .order-details, .delivery-info, .billing-info {
+    margin-bottom: 20px;
+}
+
+.order-info .row, .order-details .row, .delivery-info .row, .billing-info .row {
+    margin-bottom: 10px;
+}
+
+.btn-black {
+    background-color: #333;
+    color: #fff;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.btn-black:hover {
+    background-color: #000;
+    color: #fff;
+}
+
+.btn-outline-black {
+    border: 1px solid #333;
+    color: #333;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+.btn-outline-black:hover {
+    background-color: #333;
+    color: #fff;
+}
