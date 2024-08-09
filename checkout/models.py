@@ -6,6 +6,7 @@ from products.models import Customer
 from products.models import Product
 from django.db.models import Sum
 from django.conf import settings
+from django_countries.fields import CountryField
 
 class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
@@ -18,13 +19,16 @@ class Order(models.Model):
     last_name = models.CharField(max_length=50, default='NA')
     email = models.EmailField(default='example@example.com')
     phone_number = models.CharField(max_length=20, default='0000000000')
-    country = models.CharField(max_length=40, default='Unknown Country')
+    country = CountryField(blank_label='Country *', null=False, blank=False)
     postcode = models.CharField(max_length=20, default='000000')
     town_or_city = models.CharField(max_length=40, default='Unknown City')
     street_address1 = models.CharField(max_length=80, default='Unknown Address')
     street_address2 = models.CharField(max_length=80, blank=True, null=True)
-    #county = models.CharField(max_length=80, blank=True, null=True)
+    original_bag = models.TextField(null=False, blank=False, default='')
+    stripe_pid = models.CharField(max_length=254, null=False, blank=False, default='')
 
+                                  
+    
 
     def _generate_order_number(self):
         """ Generate a unique order number """
@@ -35,6 +39,12 @@ class Order(models.Model):
         self.order_total = self.lineitems.aggregate(Sum('lineitem_total'))['lineitem_total__sum'] or 0
         self.grand_total = self.order_total + self.delivery_cost
         self.save()
+
+    def get_total(self):
+        """ Calculate the total cost for the order. """
+        total = sum(item.quantity * item.product.price for item in self.lineitems.all())
+        return total
+    
 
     def save(self, *args, **kwargs):
         """ Override save method to set order number if not already set. """

@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect, reverse,get_object_or_404
+from django.shortcuts import render, redirect, reverse,get_object_or_404,HttpResponse
+from django.views.decorators.http import require_POST
 from django.contrib import messages
 from .forms import OrderForm
 from .models import Order, OrderLineItem
@@ -6,7 +7,25 @@ from products.models import Customer,Product
 from bag.contexts import bag_contents
 import stripe
 from django.conf import settings
+import json
 
+
+
+@require_POST
+def cache_checkout_data(request):
+    try:
+        pid = request.POST.get('client_secret').split('_secret')[0]
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        stripe.PaymentIntent.modify(pid, metadata={
+            'bag': json.dumps(request.session.get('bag', {})),
+            'save_info': request.POST.get('save_info'),
+            'username': request.user.username,
+        })
+        return HttpResponse(status=200)
+    except Exception as e:
+        messages.error(request, 'Sorry, your payment cannot be \
+            processed right now. Please try again later.')
+        return HttpResponse(content=e, status=400)
 
 
 # Set the Stripe API key
@@ -60,8 +79,10 @@ def checkout(request):
                 )
 
             order.customer = customer
+            pid = request.POST.get('client_secret').split('_secret')[0]
+            order.stripe_pid = pid
+            order.original_bag = json.dumps(bag)
             order.save()
-
             for item_id, item_data in bag.items():
                 try:
                     item_id = int(item_id)
@@ -89,6 +110,19 @@ def checkout(request):
                     return redirect(reverse('view_bag'))
 
             request.session['save_info'] = 'save-info' in request.POST
+
+            # Include the metadata
+            intent = stripe.PaymentIntent.create(
+                amount=int(order.get_total() * 100),
+                currency=settings.STRIPE_CURRENCY,
+                metadata={
+                    'order_id': order.order_number,
+                    'customer_id': customer.id,
+                    'email': customer.email,
+                }
+            )
+
+
             return redirect(reverse('checkout_success', args=[order.order_number]))
         else:
             messages.error(request, 'There was an error with your form. \
@@ -106,6 +140,11 @@ def checkout(request):
         intent = stripe.PaymentIntent.create(
             amount=stripe_total,
             currency=settings.STRIPE_CURRENCY,
+            metadata={
+                'bag': json.dumps(bag),
+                'save_info': 'save-info' in request.POST,
+                'username': request.user.username,
+            }
         )
 
         order_form = OrderForm()
