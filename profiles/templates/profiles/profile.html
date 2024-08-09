@@ -1,78 +1,46 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block extra_css %}
-    <link rel="stylesheet" href="{% static 'profiles/css/profile.css' %}">
-{% endblock %}
-
-{% block page_header %}
-    <div class="container header-container">
-        <div class="row">
-            <div class="col">
-                <h1>{{ user.username }}'s Profile</h1>
-            </div>
-        </div>
-    </div>
-{% endblock %}
-
 {% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="col-12 col-md-6 mb-4">
-                <h2>Profile Information</h2>
-                <form method="POST" action="{% url 'profile' %}">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="default_phone_number">Phone Number:</label>
-                        <input type="text" name="default_phone_number" id="default_phone_number"
-                               class="form-control" value="{{ profile.default_phone_number }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="default_country">Country:</label>
-                        {{ profile_form.country }}
-                    </div>
-                    <div class="form-group">
-                        <label for="default_postcode">Postal Code:</label>
-                        <input type="text" name="default_postcode" id="default_postcode"
-                               class="form-control" value="{{ profile.default_postcode }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="default_town_or_city">Town or City:</label>
-                        <input type="text" name="default_town_or_city" id="default_town_or_city"
-                               class="form-control" value="{{ profile.default_town_or_city }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="default_street_address1">Street Address 1:</label>
-                        <input type="text" name="default_street_address1" id="default_street_address1"
-                               class="form-control" value="{{ profile.default_street_address1 }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="default_street_address2">Street Address 2:</label>
-                        <input type="text" name="default_street_address2" id="default_street_address2"
-                               class="form-control" value="{{ profile.default_street_address2 }}">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Update Profile</button>
-                </form>
-            </div>
+
+<div class="container mt-5">
+    <h2 class="mb-4">My Profile</h2>
+    <h4 class="mb-4">Welcome {{ request.user.first_name }} {{ request.user.last_name }}!</h4>
+
+    <div class="row">
+        <!-- Update Delivery Information Section -->
+        <div class="col-md-6">
+            <h3>Update Delivery Information</h3>
+
+            <!-- Start of Form Block -->
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}  <!-- This will render the form fields with appropriate widgets -->
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+            <!-- End of Form Block -->
+
         </div>
 
-        <div class="row">
-            <div class="col-12 col-md-6 mb-4">
-                <h2>Order History</h2>
-                {% if orders %}
-                    <ul class="list-group">
-                        {% for order in orders %}
-                            <li class="list-group-item">
-                                <a href="{% url 'order_detail' order.order_number %}">
-                                    Order #{{ order.order_number }} - {{ order.date }} - ${{ order.grand_total }}
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <p>You have no order history.</p>
-                {% endif %}
-            </div>
+        <!-- Order History Section -->
+        <div class="col-md-6">
+            <h3>Order History</h3>
+            {% if orders %}
+                <ul class="list-group">
+                    {% for order in orders %}
+                        <li class="list-group-item">
+                            <strong>Order #{{ order.order_number }}</strong><br>
+                            Placed on {{ order.date }}<br>
+                            Total: ${{ order.grand_total }}<br>
+                            Status: {{ order.get_status_display }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>You have no past orders.</p>
+            {% endif %}
         </div>
     </div>
+</div>
+
 {% endblock %}

@@ -1,18 +1,25 @@
 
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from .models import Profile
-from .forms import ProfileForm
-from checkout.models import Order
+# profiles/views.py
 
+from django.shortcuts import render, redirect
+from .forms import ProfileForm
+from django.contrib import messages
 
 def profile(request):
-    profile = get_object_or_404(Profile, user=request.user)
+    profile = request.user.profile
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your profile was updated successfully!')
+            return redirect('profile')
+    else:
+        form = ProfileForm(instance=profile)
 
-    template = 'profiles/profile.html'
+    orders = profile.orders.all()
 
     context = {
-        'profile' :profile,
+        'form': form,
+        'orders': orders,
     }
-    return render(request, template, context)
+    return render(request, 'profiles/profile.html', context)
