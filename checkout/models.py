@@ -1,7 +1,6 @@
 from django.db import models
-
-# Create your models here.
 import uuid
+from profiles.models import Profile
 from products.models import Customer
 from products.models import Product
 from django.db.models import Sum
@@ -9,6 +8,7 @@ from django.conf import settings
 from django_countries.fields import CountryField
 
 class Order(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True, related_name='orders')
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
     order_number = models.CharField(max_length=32, editable=False, unique=True)
     date = models.DateTimeField(auto_now_add=True)
