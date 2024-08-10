@@ -5,21 +5,17 @@
 
 <div class="container mt-5">
     <h2 class="mb-4">My Profile</h2>
-    <h4 class="mb-4">Welcome {{ request.user.first_name }} {{ request.user.last_name }}!</h4>
 
     <div class="row">
         <!-- Update Delivery Information Section -->
         <div class="col-md-6">
             <h3>Update Delivery Information</h3>
-
-            <!-- Start of Form Block -->
+            <p><strong>{{ user.first_name }} {{ user.last_name }}</strong></p>  <!-- User's Name Added -->
             <form method="POST">
                 {% csrf_token %}
-                {{ form.as_p }}  <!-- This will render the form fields with appropriate widgets -->
+                {{ form.as_p }}  <!-- Form fields rendered with appropriate widgets -->
                 <button type="submit" class="btn btn-primary">Save Changes</button>
             </form>
-            <!-- End of Form Block -->
-
         </div>
 
         <!-- Order History Section -->
@@ -29,7 +25,11 @@
                 <ul class="list-group">
                     {% for order in orders %}
                         <li class="list-group-item">
-                            <strong>Order #{{ order.order_number }}</strong><br>
+                            <strong>
+                                <a href="{% url 'order_history' order.order_number %}">
+                                    Order #{{ order.order_number|slice:":6" }}
+                                </a>
+                            </strong><br> 
                             Placed on {{ order.date }}<br>
                             Total: ${{ order.grand_total }}<br>
                             Status: {{ order.get_status_display }}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Order #{{ order.order_number|slice:":6" }}</h2>
+
+    <p><strong>Date:</strong> {{ order.date }}</p>
+    <p><strong>Total:</strong> ${{ order.grand_total }}</p>
+    <p><strong>Status:</strong> {{ order.get_status_display }}</p>
+
+    <h4>Items:</h4>
+    <ul>
+        {% for item in order.lineitems.all %}
+            <li>{{ item.quantity }} x {{ item.product.name }} @ ${{ item.product.price }} each</li>
+        {% endfor %}
+    </ul>
+
+    <h4>Delivery Information:</h4>
+    <p>{{ order.street_address1 }}<br>
+       {% if order.street_address2 %}{{ order.street_address2 }}<br>{% endif %}
+       {{ order.town_or_city }}, {{ order.postcode }}<br>
+       {{ order.country }}</p>
+</div>
+{% endblock %}

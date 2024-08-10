@@ -3,6 +3,8 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 from .forms import OrderForm
 from .models import Order, OrderLineItem
+from profiles.models import Profile
+from profiles.forms import ProfileForm
 from products.models import Customer,Product
 from bag.contexts import bag_contents
 import stripe
@@ -109,7 +111,10 @@ def checkout(request):
                     order.delete()
                     return redirect(reverse('view_bag'))
 
-            request.session['save_info'] = 'save-info' in request.POST
+            # request.session['save_info'] = 'save-info' in request.POST
+            # Handle the "Save Info" checkbox
+            if request.POST.get('save-info'):
+                request.session['save_info'] = True
 
             # Include the metadata
             intent = stripe.PaymentIntent.create(
@@ -162,10 +167,31 @@ def checkout(request):
 
     return render(request, template, context)
 
+
+
 def checkout_success(request, order_number):
-    
-    save_info = request.session.get('save_info')
     order = get_object_or_404(Order, order_number=order_number)
+    profile = request.user.profile
+
+    # Associate the order with the user's profile
+    if request.user.is_authenticated:
+        order.profile = profile
+        order.save()
+
+    # Optionally handle the "save_info" checkbox
+    if request.session.get('save_info'):
+        profile_data = {
+            'default_phone_number': order.phone_number,
+            'default_country': order.country,
+            'default_postcode': order.postcode,
+            'default_town_or_city': order.town_or_city,
+            'default_street_address1': order.street_address1,
+            'default_street_address2': order.street_address2,
+        }
+        user_profile_form = ProfileForm(profile_data, instance=profile)
+        if user_profile_form.is_valid():
+            user_profile_form.save()
+
     messages.success(request, f'Order successfully processed! \
         Your order number is {order_number}. A confirmation \
         email will be sent to {order.email}.')
@@ -173,9 +199,8 @@ def checkout_success(request, order_number):
     if 'bag' in request.session:
         del request.session['bag']
 
-    template = 'checkout/checkout_success.html'
     context = {
         'order': order,
     }
 
-    return render(request, template, context)
+    return render(request, 'checkout/checkout_success.html', context)
