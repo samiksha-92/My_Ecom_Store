@@ -16,7 +16,7 @@ class Category(models.Model):
        return self.name
 
 
-    def __get_friendly_name(self):
+    def get_friendly_name(self):
         return self.friendly_name
 
 class Product(models.Model):

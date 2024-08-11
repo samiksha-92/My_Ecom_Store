@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Product Management</h2>
+
+    <!-- Add New Product Form -->
+    <div class="row">
+        <div class="col-md-8">
+            <h3>Add a New Product</h3>
+            <form method="POST" enctype="multipart/form-data" action="{% url 'add_product' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-success">Add Product</button>
+                <a href="{% url 'product_management' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+
+    <!-- Existing Products List -->
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h3>Existing Products</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th>Category</th>
+                        <th>SKU</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.description }}</td>
+                        <td>${{ product.price }}</td>
+                        <td>{{ product.category.friendly_name }}</td>
+                        <td>{{ product.sku }}</td>
+                        <td>
+                            <a href="{% url 'update_product' product.id %}" class="btn btn-primary btn-sm">Edit</a>
+                            <a href="{% url 'delete_product' product.id %}" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
