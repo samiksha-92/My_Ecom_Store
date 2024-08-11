@@ -2,43 +2,49 @@
 {% load static %}
 
 {% block content %}
-
-<div class="container mt-5">
-    <h2 class="mb-4">My Profile</h2>
-
+<!-- Added white background with padding and rounded corners -->
+<div class="container mt-5 pt-5">
     <div class="row">
-        <!-- Update Delivery Information Section -->
-        <div class="col-md-6">
-            <h3>Update Delivery Information</h3>
-            <p><strong>{{ user.first_name }} {{ user.last_name }}</strong></p>  <!-- User's Name Added -->
-            <form method="POST">
-                {% csrf_token %}
-                {{ form.as_p }}  <!-- Form fields rendered with appropriate widgets -->
-                <button type="submit" class="btn btn-primary">Save Changes</button>
-            </form>
-        </div>
+        <div class="col-md-12">
+            <div class="p-4" style="background-color: white; border-radius: 10px;">
+                <h2 class="mb-4">My Profile</h2>
 
-        <!-- Order History Section -->
-        <div class="col-md-6">
-            <h3>Order History</h3>
-            {% if orders %}
-                <ul class="list-group">
-                    {% for order in orders %}
-                        <li class="list-group-item">
-                            <strong>
-                                <a href="{% url 'order_history' order.order_number %}">
-                                    Order #{{ order.order_number|slice:":6" }}
-                                </a>
-                            </strong><br> 
-                            Placed on {{ order.date }}<br>
-                            Total: ${{ order.grand_total }}<br>
-                            Status: {{ order.get_status_display }}
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>You have no past orders.</p>
-            {% endif %}
+                <div class="row">
+                    <!-- Update Delivery Information Section -->
+                    <div class="col-md-6">
+                        <h3>Update Delivery Information</h3>
+                        <p><strong>{{ user.first_name }} {{ user.last_name }}</strong></p> <!-- User's Name Added -->
+                        <form method="POST">
+                            {% csrf_token %}
+                            {{ form.as_p }} <!-- Form fields rendered with appropriate widgets -->
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </form>
+                    </div>
+
+                    <!-- Order History Section -->
+                    <div class="col-md-6">
+                        <h3>Order History</h3>
+                        {% if orders %}
+                            <ul class="list-group">
+                                {% for order in orders %}
+                                    <li class="list-group-item">
+                                        <strong>
+                                            <a href="{% url 'order_history' order.order_number %}">
+                                                Order #{{ order.order_number|slice:":6" }}
+                                            </a>
+                                        </strong><br> 
+                                        Placed on {{ order.date }}<br>
+                                        Total: ${{ order.grand_total }}<br>
+                                        Status: {{ order.get_status_display }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p>You have no past orders.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
