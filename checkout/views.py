@@ -151,8 +151,26 @@ def checkout(request):
                 'username': request.user.username,
             }
         )
-
-        order_form = OrderForm()
+        if request.user.is_authenticated:
+            try:
+                profile = request.user.profile
+                form_data = {
+                    'first_name': request.user.first_name,
+                    'last_name': request.user.last_name,
+                    'email': request.user.email,
+                    'phone_number': profile.default_phone_number,
+                    'country': profile.default_country,
+                    'postcode': profile.default_postcode,
+                    'town_or_city': profile.default_town_or_city,
+                    'street_address1': profile.default_street_address1,
+                    'street_address2': profile.default_street_address2,
+                }
+                order_form = OrderForm(initial=form_data)
+            except Profile.DoesNotExist:
+                order_form = OrderForm()
+        else:
+            order_form = OrderForm()
+       
 
     if not stripe_public_key:
         messages.warning(request, 'Stripe public key is missing. \
