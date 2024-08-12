@@ -24,4 +24,70 @@
             </div>
         </div>
     </div>
+
+    <!-- Newsletter Subscription Form -->
+    {% if not request.COOKIES.newsletter_subscribed %}
+    <div id="newsletter-signup" class="newsletter-container">
+        <div class="newsletter-content">
+            <button type="button" class="close" id="close-newsletter" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4>Subscribe to our Newsletter</h4>
+            <form method="POST" id="newsletter-form">
+                {% csrf_token %}
+                {{ form.email.label_tag }} <!-- Only the email field -->
+                {{ form.email }} 
+                <button type="submit" class="btn btn-primary mt-2">Subscribe</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.getElementById('close-newsletter').addEventListener('click', function() {
+        document.getElementById('newsletter-signup').style.display = 'none';
+    });
+
+    // This checks for form submission and hides the newsletter box if successful
+    document.getElementById('newsletter-form').addEventListener('submit', function() {
+        document.getElementById('newsletter-signup').style.display = 'none';
+    });
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .newsletter-container {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        width: 300px;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .newsletter-content {
+        position: relative;
+    }
+    .newsletter-content h4 {
+        font-size: 1.25rem;
+        margin-bottom: 10px;
+    }
+    .newsletter-content .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 1.5rem;
+        color: #6c757d;
+        border: none;
+        background: none;
+    }
+    .newsletter-content .close:hover {
+        color: #343a40;
+    }
+</style>
 {% endblock %}
