@@ -2,13 +2,15 @@ from django.shortcuts import render,get_object_or_404,redirect,reverse
 from django.contrib import messages
 from django.urls import reverse
 from django.db.models import Q
-from .models import Product,Category
+from .models import Product,Category,Review,Customer
 from django.contrib.auth.decorators import user_passes_test
-from .forms import ProductForm
+from .forms import ProductForm, ReviewForm
+from django.contrib.auth.decorators import login_required
+from profiles.models import Profile
+
+
 
     
-    
-
 def all_products(request):
     products = Product.objects.all()
     query = request.GET.get('q')
@@ -57,8 +59,12 @@ def all_products(request):
 def product_detail(request,pk):
 
     product = get_object_or_404(Product,pk=pk)
+    reviews = Review.objects.filter(product=product)
+    review_form = ReviewForm()
     context = {
         'product' : product,
+        'reviews': reviews,
+        'review_form': review_form,
     }
     
     return render (request, 'products/product_detail.html',context)    
@@ -114,3 +120,72 @@ def delete_product(request, product_id):
     product.delete()
     messages.success(request, 'Product deleted successfully!')
     return redirect('product_management')
+
+
+
+
+
+@login_required
+def create_review(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    profile = request.user.profile  # Assume the user has a profile
+    
+    if request.method == 'POST':
+        review_form = ReviewForm(request.POST)
+        if review_form.is_valid():
+            if not review_form.cleaned_data.get('review_text').strip():
+                messages.error(request, 'Review text cannot be empty.')
+                return redirect('product_detail', pk=product.id)
+
+            review = review_form.save(commit=False)
+            review.product = product
+            review.profile = profile  # Associate the review with the user's profile
+            review.save()
+            messages.success(request, 'Your review has been submitted.')
+            return redirect('product_detail', pk=product.id)
+        else:
+            messages.error(request, 'There was an error with your review. Please make sure to post something.')
+    
+    return redirect('product_detail', pk=product.id)
+
+@login_required
+def update_review(request, review_id):
+    review = get_object_or_404(Review, id=review_id)
+    if review.profile != request.user.profile:
+        messages.error(request, 'You are not authorized to edit this review.')
+        return redirect('product_detail', pk=review.product.id)
+
+    if request.method == 'POST':
+        review_form = ReviewForm(request.POST, instance=review)
+        if review_form.is_valid():
+            review_form.save()
+            messages.success(request, 'Your review has been updated.')
+            return redirect('product_detail', pk=review.product.id)
+        else:
+            messages.error(request, 'There was an error with your review. Please try again.')
+
+    else:
+        review_form = ReviewForm(instance=review)
+
+    context = {
+        'review_form': review_form,
+        'product': review.product
+    }
+    return render(request, 'products/update_review.html', context)
+
+@login_required
+def delete_review(request, review_id):
+    review = get_object_or_404(Review, id=review_id)
+    if review.profile != request.user.profile:
+        messages.error(request, 'You are not authorized to delete this review.')
+        return redirect('product_detail', pk=review.product.id)
+
+    if request.method == 'POST':
+        review.delete()
+        messages.success(request, 'Your review has been deleted.')
+        return redirect('product_detail', pk=review.product.id)
+
+    context = {
+        'review': review
+    }
+    return render(request, 'products/delete_review.html', context)

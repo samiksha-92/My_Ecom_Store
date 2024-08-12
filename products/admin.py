@@ -29,9 +29,17 @@ class CustomerAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name', 'email', 'phone_number',)
     search_fields = ('first_name', 'last_name', 'email',)
 
+  
+
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('product', 'customer','review_text')
-    search_fields = ('customer__first_name', 'customer__last_name', 'product__name')    
+    list_display = ('product', 'get_user_full_name','review_text')
+
+    def get_user_full_name(self, obj):
+        return obj.profile.user.get_full_name()
+
+    get_user_full_name.short_description = 'User' 
+
+    
 

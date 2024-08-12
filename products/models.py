@@ -1,6 +1,6 @@
 
 from django.db import models
-
+from profiles.models import Profile  # Import Profile
 # Create your models here.
 
 class Category(models.Model):
@@ -54,10 +54,10 @@ class Customer(models.Model):
 
 class Review(models.Model):
     product = models.ForeignKey('Product', on_delete=models.CASCADE)
-    customer = models.ForeignKey('Customer', on_delete=models.CASCADE)
+    #customer = models.ForeignKey('Customer', on_delete=models.CASCADE)
+    profile = models.ForeignKey('profiles.Profile', on_delete=models.CASCADE,null=True, blank=True)
     review_text = models.TextField(null =True, blank=True)
     
     def __str__(self):
-        return f"Review by {self.customer.full_name()} for {self.product.name}"
-
+        return f"Review by {self.profile.user.get_full_name()} for {self.product.name}"
     

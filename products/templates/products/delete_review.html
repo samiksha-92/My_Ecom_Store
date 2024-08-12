@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container" style="margin-top: 150px;"> <!-- Increased margin-top to 150px -->
+    <div class="p-4 bg-white rounded shadow-sm">
+        <h2 class="mb-4 text-primary">Delete Your Review</h2> <!-- Heading is now more visible -->
+        <p>Are you sure you want to delete your review?</p>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="d-flex justify-content-between mt-3"> <!-- Added margin-top to space out the buttons -->
+                <button type="submit" class="btn btn-danger">Delete Review</button>
+                <a href="{% url 'product_detail' review.product.id %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+
