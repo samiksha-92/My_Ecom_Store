@@ -1,0 +1,1 @@
+web: gunicorn allday_store.wsgi:application
