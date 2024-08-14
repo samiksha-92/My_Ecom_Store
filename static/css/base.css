@@ -8,6 +8,19 @@ body {
     height: calc(100vh - 164px);
     color: #555;
     font-family: 'Lato';
+    /* Added background overlay for better readability */
+    position: relative; /* Added */
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* Added - Black overlay with 50% opacity */
+    z-index: 1; /* Ensures the overlay is on top of the background */
 }
 
 /* from Bulma */
@@ -121,9 +134,14 @@ body {
 }
 /* Allauth form formatting */
 
+.allauth-form-inner-content {
+    position: relative;
+    z-index: 2; /* Ensures the content is above the overlay */
+}
 .allauth-form-inner-content p {
     margin-top: 1.5rem; /* mt-4 */
-    color: #6c757d; /* text-secondary */
+    
+    color: #fff; /* text-secondary */
 }
 
 .allauth-form-inner-content input {
@@ -133,6 +151,7 @@ body {
 
 .allauth-form-inner-content label:not([for='id_remember']) {
     display: none;
+   
 }
 
 .allauth-form-inner-content input::placeholder {
