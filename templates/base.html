@@ -146,11 +146,33 @@
     {% endblock %}
 
     {% block content %}
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-12 col-md-10 mx-auto">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body">
+                            <h2 class="card-title text-center text-primary">Welcome to All Day Store!</h2>
+                            <p class="card-text text-justify text-secondary">
+                                At All Day Store, we believe that casual and comfortable clothing should be the cornerstone of every wardrobe. Our online store offers a wide variety of outfits that cater to those who prioritize comfort while keeping up with the latest fashion trends. From cozy hoodies to breathable joggers, every piece in our collection is designed to provide maximum comfort and style for your everyday adventures.
+                            </p>
+                            <p class="card-text text-justify text-secondary">
+                                Whether you're working from home, running errands, or just relaxing, our selection of casual wear ensures that you look and feel great all day long. We specialize in high-quality, laid-back essentials that are perfect for every occasion. Embrace your personal style with our range of comfortable, casual clothing that blends effortlessly into your lifestyle.
+                            </p>
+                            <p class="card-text text-justify text-secondary">
+                                Browse through our latest collections and discover the perfect additions to your wardrobe. With a focus on durability, versatility, and comfort, All Day Store is your go-to destination for casual fashion that never compromises on style. Join us in celebrating the art of staying comfortable and stylish throughout the day.
+                            </p>
+                            <div class="text-center mt-4">
+                                <a href="{% url 'products' %}" class="btn btn-lg btn-primary rounded-0 text-uppercase py-3 px-5">Shop Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     {% endblock %}
 
     {% block postloadjs %}
     {% endblock %}
 
-    
   </body>
 </html>
